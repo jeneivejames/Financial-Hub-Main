@@ -1,0 +1,13 @@
+command:
+  - python
+  - app.py
+
+unauthenticatedAccess: allow
+
+env:
+  - name: SUPABASE_URL
+    value: "https://tzrcjamabhduxezmeyze.supabase.co"
+  - name: SUPABASE_KEY
+    value: "sb_publishable_ass8v1L806GCZFtmv81n3Q_Uh3QsnBs"
+  - name: SECRET_KEY
+    value: "financial-help-hub-secret-key-change-in-production"
