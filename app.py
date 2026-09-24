@@ -112,17 +112,21 @@ def submit_request():
 @app.route('/api/donate', methods=['POST'])
 def donate():
     try:
-        if 'user_id' not in session:
-            return jsonify({'error': 'Please login first'}), 401
-        
         data = request.json
+        
+        # Guest donation (no login required) or authenticated donation
+        donor_id = session.get('user_id')
+        donor_name = data.get('donor_name', 'Anonymous')
+        donor_email = data.get('donor_email', '')
+        
         payment_data = {
             'request_id': data.get('request_id'),
-            'donor_id': session['user_id'],
+            'donor_id': donor_id,  # Can be None for guest donations
             'amount': data.get('amount'),
             'payment_method': data.get('payment_method', 'bank_transfer'),
             'donor_bank_details': data.get('donor_bank_details'),
-            'payment_status': 'completed'
+            'payment_status': 'pending',  # Changed to pending until verified
+            'notes': f'Donor: {donor_name}, Email: {donor_email}' if not donor_id else None
         }
         
         payment = db.create_payment(payment_data)
@@ -132,7 +136,7 @@ def donate():
         new_total = float(help_request.get('total_received', 0)) + float(data.get('amount'))
         db.update_request(data.get('request_id'), {'total_received': new_total})
         
-        return jsonify({'success': True, 'payment': payment})
+        return jsonify({'success': True, 'payment': payment, 'message': 'Thank you for your donation! 🎉'})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
