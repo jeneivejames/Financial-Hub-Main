@@ -4,7 +4,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import random
 
-app = Flask(__name__)
+# For Vercel deployment - set explicit paths
+template_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
+app = Flask(__name__, template_folder=template_dir)
 app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key')
 db = Database()
 
@@ -25,7 +27,12 @@ def index():
                              quote=random_quote,
                              user=user)
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        import traceback
+        return jsonify({
+            'error': str(e),
+            'type': type(e).__name__,
+            'traceback': traceback.format_exc()
+        }), 500
 
 # ========== AUTHENTICATION ==========
 @app.route('/api/signup', methods=['POST'])
@@ -197,4 +204,5 @@ def get_request(request_id):
 # Vercel will handle the app execution
 # Expose the app object for WSGI
 if __name__ == '__main__':
-    app.run()
+    # For Databricks Apps: listen on all interfaces
+    app.run(host='0.0.0.0', port=8000)
