@@ -8,6 +8,6 @@ env:
   - name: SUPABASE_URL
     value: "https://tzrcjamabhduxezmeyze.supabase.co"
   - name: SUPABASE_KEY
-    value: "a4c754fc-f1e1-45f9-9bf7-da7220d8e1b9"
+    value: "sb_publishable_ass8v1L806GCZFtmv81n3Q_Uh3QsnBs"
   - name: SECRET_KEY
     value: "financial-help-hub-secret-key-change-in-production"
