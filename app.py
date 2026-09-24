@@ -190,5 +190,7 @@ def get_request(request_id):
     payments = db.get_payments_for_request(request_id)
     return jsonify({'request': help_request, 'payments': payments})
 
+# Vercel will handle the app execution
+# Expose the app object for WSGI
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000, debug=True)
+    app.run()
