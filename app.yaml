@@ -8,6 +8,6 @@ env:
   - name: SUPABASE_URL
     value: "https://tzrcjamabhduxezmeyze.supabase.co"
   - name: SUPABASE_KEY
-    value: "sb_publishable_ass8v1L806GCZFtmv81n3Q_Uh3QsnBs"
+    value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR6cmNqYW1hYmhkdXhlem1leXplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjY4OTc5OTksImV4cCI6MjA0MjQ3Mzk5OX0.ass8v1L806GCZFtmv81n3Q_Uh3QsnBs"
   - name: SECRET_KEY
     value: "financial-help-hub-secret-key-change-in-production"
