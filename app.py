@@ -2,10 +2,18 @@ from flask import Flask, render_template, request, jsonify, session, redirect, u
 from database import Database
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
+import sys
 import random
 
-# For Vercel deployment - set explicit paths
-template_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
+# Set up template folder for both Databricks and Vercel
+# Vercel uses /var/task/, Databricks uses regular paths
+if os.path.exists('/var/task'):
+    # Vercel environment
+    template_dir = '/var/task/templates'
+else:
+    # Databricks or local environment
+    template_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
+
 app = Flask(__name__, template_folder=template_dir)
 app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key')
 db = Database()
