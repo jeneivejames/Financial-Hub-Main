@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Help Hub - Together We Make a Difference</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 5%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .nav-buttons button {
+            padding: 0.7rem 1.5rem;
+            margin-left: 1rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-login {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        
+        .btn-login:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-signup {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        
+        .btn-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245,87,108,0.4);
+        }
+        
+        /* Hero Section with Quote */
+        .hero {
+            padding: 4rem 5%;
+            text-align: center;
+            color: white;
+        }
+        
+        .quote-container {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .quote-text {
+            font-size: 1.8rem;
+            font-style: italic;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .quote-author {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin: 2rem 0 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+        }
+        
+        /* Request Cards Container */
+        .requests-section {
+            padding: 3rem 5%;
+            background: #f5f7fa;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 3rem;
+        }
+        
+        .requests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        /* Colorful Request Cards */
+        .request-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        .request-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        .card-header {
+            padding: 1.5rem;
+            color: white;
+            font-weight: bold;
+        }
+        
+        /* Vibrant gradient backgrounds for cards */
+        .card-header.gradient-1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-header.gradient-2 {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .card-header.gradient-3 {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .card-header.gradient-4 {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        
+        .card-header.gradient-5 {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .card-header.gradient-6 {
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .card-info {
+            margin: 0.5rem 0;
+            color: #555;
+        }
+        
+        .amount-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #f0f0f0;
+        }
+        
+        .amount-needed, .amount-received {
+            text-align: center;
+        }
+        
+        .amount-label {
+            font-size: 0.9rem;
+            color: #777;
+            margin-bottom: 0.3rem;
+        }
+        
+        .amount-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .btn-donate {
+            width: 100%;
+            padding: 1rem;
+            margin-top: 1rem;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-donate:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 600;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .btn-close {
+            background: #e0e0e0;
+            color: #555;
+            margin-top: 1rem;
+        }
+        
+        .message {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">💙 Financial Help Hub</div>
+        <div class="nav-buttons" id="navButtons">
+            {% if user %}
+                <span style="color: #667eea; margin-right: 1rem;">Welcome, {{ user.full_name }}!</span>
+                <button class="btn-signup" onclick="openRequestModal()">Submit Request</button>
+                <button class="btn-login" onclick="logout()">Logout</button>
+            {% else %}
+                <button class="btn-login" onclick="openModal('loginModal')">Login</button>
+                <button class="btn-signup" onclick="openModal('signupModal')">Sign Up</button>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Hero Section with Quote -->
+    <section class="hero">
+        <div class="quote-container">
+            <div class="quote-text">"{{ quote.text }}"</div>
+            <div class="quote-author">— {{ quote.author }}</div>
+        </div>
+        <h1>Together We Make a Difference</h1>
+        <p>Help those in need. Every contribution counts.</p>
+        <p style="background: rgba(255,255,255,0.3); padding: 0.8rem 1.5rem; border-radius: 50px; display: inline-block; margin-top: 1rem; font-weight: 500;">
+            ✨ No registration required • Donate instantly • 100% transparent
+        </p>
+    </section>
+
+    <!-- Requests Section -->
+    <section class="requests-section">
+        <h2 class="section-title">🌟 People Who Need Your Help</h2>
+        <div class="requests-grid" id="requestsGrid">
+            {% for req in requests %}
+            <div class="request-card">
+                <div class="card-header gradient-{{ loop.index % 6 + 1 }}">
+                    <div style="font-size: 1.3rem;">{{ req.name }}, {{ req.age }} years</div>
+                    <div style="opacity: 0.9; font-size: 0.9rem; margin-top: 0.5rem;">{{ req.districts.name }} | {{ req.categories.name }}</div>
+                </div>
+                <div class="card-body">
+                    <p class="card-info">{{ req.description }}</p>
+                    <div class="amount-info">
+                        <div class="amount-needed">
+                            <div class="amount-label">Amount Needed</div>
+                            <div class="amount-value">₹{{ req.amount }}</div>
+                        </div>
+                        <div class="amount-received">
+                            <div class="amount-label">Received</div>
+                            <div class="amount-value" style="color: #43e97b;">₹{{ req.total_received or 0 }}</div>
+                        </div>
+                    </div>
+                    <button class="btn-donate" onclick="openDonateModal({{ req.id }}, '{{ req.name }}', {{ req.amount }})">💝 Donate Now</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <h2 class="modal-header">Welcome Back!</h2>
+            <div id="loginMessage"></div>
+            <form onsubmit="login(event)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn-submit">Login</button>
+                <button type="button" class="btn-submit btn-close" onclick="closeModal('loginModal')">Close</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal" id="signupModal">
+        <div class="modal-content">
+            <h2 class="modal-header">Join Our Community</h2>
+            <div id="signupMessage"></div>
+            <form onsubmit="signup(event)">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="signupName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="signupEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="tel" id="signupPhone" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="signupPassword" required>
+                </div>
+                <button type="submit" class="btn-submit">Sign Up</button>
+                <button type="button" class="btn-submit btn-close" onclick="closeModal('signupModal')">Close</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Donate Modal -->
+    <div class="modal" id="donateModal">
+        <div class="modal-content">
+            <h2 class="modal-header">💝 Make a Donation</h2>
+            <p style="text-align: center; color: #777; margin-bottom: 1rem;">No registration required • Donate instantly</p>
+            <div id="donateMessage"></div>
+            <form onsubmit="submitDonation(event)">
+                <input type="hidden" id="donateRequestId">
+                <div class="form-group">
+                    <label>Donating to:</label>
+                    <div id="donateRecipientName" style="font-weight: bold; color: #667eea;"></div>
+                </div>
+                <div class="form-group">
+                    <label>Your Name (Optional)</label>
+                    <input type="text" id="donorName" placeholder="Anonymous">
+                </div>
+                <div class="form-group">
+                    <label>Your Email (Optional)</label>
+                    <input type="email" id="donorEmail" placeholder="For receipt confirmation">
+                </div>
+                <div class="form-group">
+                    <label>Amount (₹)</label>
+                    <input type="number" id="donateAmount" required min="1">
+                </div>
+                <div class="form-group">
+                    <label>Payment Method</label>
+                    <select id="donateMethod">
+                        <option value="bank_transfer">Bank Transfer</option>
+                        <option value="upi">UPI</option>
+                        <option value="card">Card</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-submit">💝 Confirm Donation</button>
+                <button type="button" class="btn-submit btn-close" onclick="closeModal('donateModal')">Close</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2024 Financial Help Hub - Empowering Communities Through Giving</p>
+        <p style="margin-top: 0.5rem;">Made with ❤️ for those in need</p>
+    </footer>
+
+    <script>
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        async function login(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({email, password})
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    location.reload();
+                } else {
+                    document.getElementById('loginMessage').innerHTML = '<div class="message error">' + (data.error || 'Login failed') + '</div>';
+                }
+            } catch (error) {
+                document.getElementById('loginMessage').innerHTML = '<div class="message error">An error occurred</div>';
+            }
+        }
+        
+        async function signup(e) {
+            e.preventDefault();
+            const full_name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const phone = document.getElementById('signupPhone').value;
+            const password = document.getElementById('signupPassword').value;
+            
+            try {
+                const response = await fetch('/api/signup', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({full_name, email, phone, password})
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    location.reload();
+                } else {
+                    document.getElementById('signupMessage').innerHTML = '<div class="message error">' + (data.error || 'Signup failed') + '</div>';
+                }
+            } catch (error) {
+                document.getElementById('signupMessage').innerHTML = '<div class="message error">An error occurred</div>';
+            }
+        }
+        
+        async function logout() {
+            await fetch('/api/logout', {method: 'POST'});
+            location.reload();
+        }
+        
+        function openDonateModal(requestId, name, amount) {
+            // No login required! Anyone can donate
+            document.getElementById('donateRequestId').value = requestId;
+            document.getElementById('donateRecipientName').textContent = name;
+            document.getElementById('donateAmount').value = amount;
+            openModal('donateModal');
+        }
+        
+        async function submitDonation(e) {
+            e.preventDefault();
+            const request_id = document.getElementById('donateRequestId').value;
+            const amount = document.getElementById('donateAmount').value;
+            const payment_method = document.getElementById('donateMethod').value;
+            const donor_name = document.getElementById('donorName').value || 'Anonymous';
+            const donor_email = document.getElementById('donorEmail').value || '';
+            
+            try {
+                const response = await fetch('/api/donate', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        request_id, 
+                        amount, 
+                        payment_method,
+                        donor_name,
+                        donor_email
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('donateMessage').innerHTML = '<div class="message success">' + (data.message || 'Thank you for your donation! 🎉') + '</div>';
+                    setTimeout(() => location.reload(), 2000);
+                } else {
+                    document.getElementById('donateMessage').innerHTML = '<div class="message error">' + (data.error || 'Donation failed') + '</div>';
+                }
+            } catch (error) {
+                document.getElementById('donateMessage').innerHTML = '<div class="message error">An error occurred</div>';
+            }
+        }
+    </script>
+</body>
+</html>
