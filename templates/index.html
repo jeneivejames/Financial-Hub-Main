@@ -337,6 +337,7 @@
             {% else %}
                 <button class="btn-login" onclick="openModal('loginModal')">Login</button>
                 <button class="btn-signup" onclick="openModal('signupModal')">Sign Up</button>
+                <a href="/admin" style="margin-left: 10px; color: #667eea; text-decoration: none; font-weight: 600;">🔒 Admin</a>
             {% endif %}
         </div>
     </nav>
@@ -361,7 +362,7 @@
             {% for req in requests %}
             <div class="request-card">
                 <div class="card-header gradient-{{ loop.index % 6 + 1 }}">
-                    <div style="font-size: 1.3rem;">{{ req.name }}, {{ req.age }} years</div>
+                    <div style="font-size: 1.3rem;">{{ req.name }}</div>
                     <div style="opacity: 0.9; font-size: 0.9rem; margin-top: 0.5rem;">{{ req.districts.name }} | {{ req.categories.name }}</div>
                 </div>
                 <div class="card-body">
@@ -369,14 +370,14 @@
                     <div class="amount-info">
                         <div class="amount-needed">
                             <div class="amount-label">Amount Needed</div>
-                            <div class="amount-value">₹{{ req.amount }}</div>
+                            <div class="amount-value">₹{{ req.amount_needed }}</div>
                         </div>
                         <div class="amount-received">
                             <div class="amount-label">Received</div>
                             <div class="amount-value" style="color: #43e97b;">₹{{ req.total_received or 0 }}</div>
                         </div>
                     </div>
-                    <button class="btn-donate" onclick="openDonateModal({{ req.id }}, '{{ req.name }}', {{ req.amount }})">💝 Donate Now</button>
+                    <button class="btn-donate" onclick="console.log('Button clicked!'); openDonateModal('{{ req.id }}', '{{ req.name }}', {{ req.amount_needed }})">💝 Donate Now</button>
                 </div>
             </div>
             {% endfor %}
@@ -457,14 +458,104 @@
                 </div>
                 <div class="form-group">
                     <label>Payment Method</label>
-                    <select id="donateMethod">
+                    <select id="donateMethod" onchange="togglePaymentFields()">
                         <option value="bank_transfer">Bank Transfer</option>
                         <option value="upi">UPI</option>
                         <option value="card">Card</option>
                     </select>
                 </div>
+                <!-- Donor Bank/Card Details -->
+                <div id="bankFields">
+                    <div class="form-group">
+                        <label>Bank Account Number</label>
+                        <input type="text" id="donorAccountNumber" placeholder="Enter your bank account number" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Bank Name</label>
+                        <input type="text" id="donorBankName" placeholder="Enter your bank name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>IFSC Code</label>
+                        <input type="text" id="donorIfscCode" placeholder="Enter IFSC code" required>
+                    </div>
+                </div>
+                <div id="upiFields" style="display:none;">
+                    <div class="form-group">
+                        <label>UPI ID</label>
+                        <input type="text" id="donorUpiId" placeholder="yourname@bank" required>
+                    </div>
+                </div>
+                <div id="cardFields" style="display:none;">
+                    <div class="form-group">
+                        <label>Card Number</label>
+                        <input type="text" id="donorCardNumber" placeholder="XXXX XXXX XXXX XXXX" maxlength="19" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Card Expiry (MM/YY)</label>
+                        <input type="text" id="donorCardExpiry" placeholder="MM/YY" maxlength="5" required>
+                    </div>
+                    <div class="form-group">
+                        <label>CVV</label>
+                        <input type="password" id="donorCardCvv" placeholder="3 digits" maxlength="4" required>
+                    </div>
+                </div>
                 <button type="submit" class="btn-submit">💝 Confirm Donation</button>
                 <button type="button" class="btn-submit btn-close" onclick="closeModal('donateModal')">Close</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Request Submission Modal -->
+    <div class="modal" id="requestModal">
+        <div class="modal-content">
+            <h2 class="modal-header">📝 Submit Help Request</h2>
+            <div id="requestMessage"></div>
+            <form onsubmit="submitRequest(event)">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="requestName" required>
+                </div>
+                <div class="form-group">
+                    <label>District</label>
+                    <select id="requestDistrict" required>
+                        <option value="">Select District</option>
+                        <option value="1">District 1</option>
+                        <option value="2">District 2</option>
+                        <option value="3">District 3</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="requestCategory" required>
+                        <option value="">Select Category</option>
+                        <option value="1">Medical</option>
+                        <option value="2">Education</option>
+                        <option value="3">Emergency</option>
+                        <option value="4">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Amount Needed (₹)</label>
+                    <input type="number" id="requestAmount" required min="1">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="requestDescription" required rows="4" placeholder="Explain your situation and how the funds will help..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Bank Account Number</label>
+                    <input type="text" id="requestAccountNumber" required placeholder="Enter your bank account number for receiving funds">
+                </div>
+                <div class="form-group">
+                    <label>Bank Name</label>
+                    <input type="text" id="requestBankName" required placeholder="Enter your bank name">
+                </div>
+                <div class="form-group">
+                    <label>IFSC Code</label>
+                    <input type="text" id="requestIfscCode" required placeholder="Enter your bank IFSC code">
+                </div>
+                <button type="submit" class="btn-submit">📝 Submit Request</button>
+                <button type="button" class="btn-submit btn-close" onclick="closeModal('requestModal')">Close</button>
             </form>
         </div>
     </div>
@@ -477,11 +568,23 @@
 
     <script>
         function openModal(modalId) {
-            document.getElementById(modalId).classList.add('active');
+            console.log('openModal called for:', modalId);
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+                console.log('Modal activated:', modalId);
+            } else {
+                console.error('Modal not found:', modalId);
+                alert('Modal not found: ' + modalId);
+            }
         }
         
         function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
+            console.log('closeModal called for:', modalId);
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+            }
         }
         
         async function login(e) {
@@ -493,6 +596,7 @@
                 const response = await fetch('/api/login', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
+                    credentials: 'include',
                     body: JSON.stringify({email, password})
                 });
                 
@@ -519,6 +623,7 @@
                 const response = await fetch('/api/signup', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
+                    credentials: 'include',
                     body: JSON.stringify({full_name, email, phone, password})
                 });
                 
@@ -535,40 +640,174 @@
         }
         
         async function logout() {
-            await fetch('/api/logout', {method: 'POST'});
+            await fetch('/api/logout', {method: 'POST', credentials: 'include'});
             location.reload();
+        }
+        
+        async function openRequestModal() {
+            // Load districts and categories dynamically
+            await loadDistrictsAndCategories();
+            openModal('requestModal');
+        }
+        
+        async function loadDistrictsAndCategories() {
+            try {
+                // Fetch districts
+                const districtsResponse = await fetch('/api/districts');
+                const districts = await districtsResponse.json();
+                
+                const districtSelect = document.getElementById('requestDistrict');
+                districtSelect.innerHTML = '<option value="">Select District</option>';
+                districts.forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district.id;
+                    option.textContent = district.name;
+                    districtSelect.appendChild(option);
+                });
+                
+                // Fetch categories
+                const categoriesResponse = await fetch('/api/categories');
+                const categories = await categoriesResponse.json();
+                
+                const categorySelect = document.getElementById('requestCategory');
+                categorySelect.innerHTML = '<option value="">Select Category</option>';
+                categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.id;
+                    option.textContent = category.name;
+                    categorySelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Failed to load districts/categories:', error);
+            }
+        }
+        
+        async function submitRequest(e) {
+            e.preventDefault();
+            const name = document.getElementById('requestName').value;
+            const district_id = document.getElementById('requestDistrict').value;
+            const category_id = document.getElementById('requestCategory').value;
+            const amount = document.getElementById('requestAmount').value;
+            const description = document.getElementById('requestDescription').value;
+            const account_number = document.getElementById('requestAccountNumber').value;
+            const bank_name = document.getElementById('requestBankName').value;
+            const ifsc_code = document.getElementById('requestIfscCode').value;
+            
+            try {
+                const response = await fetch('/api/submit-request', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    credentials: 'include',
+                    body: JSON.stringify({name, district_id, category_id, amount, description, account_number, bank_name, ifsc_code})
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Request submitted successfully! It will be reviewed by admin.');
+                    closeModal('requestModal');
+                    location.reload();
+                } else {
+                    document.getElementById('requestMessage').innerHTML = '<div class="message error">' + (data.error || 'Submission failed') + '</div>';
+                }
+            } catch (error) {
+                document.getElementById('requestMessage').innerHTML = '<div class="message error">An error occurred</div>';
+            }
         }
         
         function openDonateModal(requestId, name, amount) {
             // No login required! Anyone can donate
-            document.getElementById('donateRequestId').value = requestId;
-            document.getElementById('donateRecipientName').textContent = name;
-            document.getElementById('donateAmount').value = amount;
-            openModal('donateModal');
+            console.log('openDonateModal called with:', {requestId, name, amount});
+            console.log('Modal element exists:', !!document.getElementById('donateModal'));
+            console.log('All required elements exist:', {
+                donateRequestId: !!document.getElementById('donateRequestId'),
+                donateRecipientName: !!document.getElementById('donateRecipientName'),
+                donateAmount: !!document.getElementById('donateAmount'),
+                donateMethod: !!document.getElementById('donateMethod')
+            });
+            try {
+                document.getElementById('donateRequestId').value = requestId;
+                document.getElementById('donateRecipientName').textContent = name;
+                document.getElementById('donateAmount').value = amount;
+                
+                // Reset to bank transfer (default) and show appropriate fields
+                document.getElementById('donateMethod').value = 'bank_transfer';
+                togglePaymentFields();
+                
+                openModal('donateModal');
+                console.log('Modal opened successfully');
+            } catch (error) {
+                console.error('Error opening donate modal:', error);
+                alert('Error opening donation form: ' + error.message);
+            }
+        }
+        
+        function togglePaymentFields() {
+            const method = document.getElementById('donateMethod').value;
+            document.getElementById('bankFields').style.display = (method === 'bank_transfer') ? 'block' : 'none';
+            document.getElementById('upiFields').style.display = (method === 'upi') ? 'block' : 'none';
+            document.getElementById('cardFields').style.display = (method === 'card') ? 'block' : 'none';
+            
+            // Update required attributes
+            const bankRequired = method === 'bank_transfer';
+            document.getElementById('donorAccountNumber').required = bankRequired;
+            document.getElementById('donorBankName').required = bankRequired;
+            document.getElementById('donorIfscCode').required = bankRequired;
+            document.getElementById('donorUpiId').required = (method === 'upi');
+            document.getElementById('donorCardNumber').required = (method === 'card');
+            document.getElementById('donorCardExpiry').required = (method === 'card');
+            document.getElementById('donorCardCvv').required = (method === 'card');
         }
         
         async function submitDonation(e) {
             e.preventDefault();
+            console.log('submitDonation called');
             const request_id = document.getElementById('donateRequestId').value;
             const amount = document.getElementById('donateAmount').value;
             const payment_method = document.getElementById('donateMethod').value;
             const donor_name = document.getElementById('donorName').value || 'Anonymous';
             const donor_email = document.getElementById('donorEmail').value || '';
             
+            // Collect donor bank/card details based on payment method
+            let donor_bank_details = {};
+            if (payment_method === 'bank_transfer') {
+                donor_bank_details = {
+                    account_number: document.getElementById('donorAccountNumber').value,
+                    bank_name: document.getElementById('donorBankName').value,
+                    ifsc_code: document.getElementById('donorIfscCode').value
+                };
+            } else if (payment_method === 'upi') {
+                donor_bank_details = {
+                    upi_id: document.getElementById('donorUpiId').value
+                };
+            } else if (payment_method === 'card') {
+                donor_bank_details = {
+                    card_number: document.getElementById('donorCardNumber').value,
+                    card_expiry: document.getElementById('donorCardExpiry').value,
+                    card_cvv: document.getElementById('donorCardCvv').value
+                };
+            }
+            
+            console.log('Donation data:', {request_id, amount, payment_method, donor_name, donor_email});
+            
             try {
                 const response = await fetch('/api/donate', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
+                    credentials: 'include',
                     body: JSON.stringify({
                         request_id, 
                         amount, 
                         payment_method,
                         donor_name,
-                        donor_email
+                        donor_email,
+                        donor_bank_details
                     })
                 });
                 
+                console.log('Response status:', response.status);
                 const data = await response.json();
+                console.log('Response data:', data);
                 
                 if (data.success) {
                     document.getElementById('donateMessage').innerHTML = '<div class="message success">' + (data.message || 'Thank you for your donation! 🎉') + '</div>';
@@ -577,7 +816,8 @@
                     document.getElementById('donateMessage').innerHTML = '<div class="message error">' + (data.error || 'Donation failed') + '</div>';
                 }
             } catch (error) {
-                document.getElementById('donateMessage').innerHTML = '<div class="message error">An error occurred</div>';
+                console.error('Donation error:', error);
+                document.getElementById('donateMessage').innerHTML = '<div class="message error">Error: ' + error.message + '</div>';
             }
         }
     </script>
