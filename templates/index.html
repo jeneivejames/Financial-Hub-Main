@@ -543,16 +543,33 @@
                     <textarea id="requestDescription" required rows="4" placeholder="Explain your situation and how the funds will help..."></textarea>
                 </div>
                 <div class="form-group">
-                    <label>Bank Account Number</label>
-                    <input type="text" id="requestAccountNumber" required placeholder="Enter your bank account number for receiving funds">
+                    <label>Receive Funds Via</label>
+                    <select id="requestReceiveMethod" onchange="toggleRequestReceiveFields()" required>
+                        <option value="bank_account">Bank Account</option>
+                        <option value="upi">UPI</option>
+                    </select>
                 </div>
-                <div class="form-group">
-                    <label>Bank Name</label>
-                    <input type="text" id="requestBankName" required placeholder="Enter your bank name">
+                <!-- Bank Account Fields -->
+                <div id="requestBankFields">
+                    <div class="form-group">
+                        <label>Bank Account Number</label>
+                        <input type="text" id="requestAccountNumber" placeholder="Enter your bank account number for receiving funds" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Bank Name</label>
+                        <input type="text" id="requestBankName" placeholder="Enter your bank name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>IFSC Code</label>
+                        <input type="text" id="requestIfscCode" placeholder="Enter your bank IFSC code" required>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>IFSC Code</label>
-                    <input type="text" id="requestIfscCode" required placeholder="Enter your bank IFSC code">
+                <!-- UPI Fields -->
+                <div id="requestUpiFields" style="display:none;">
+                    <div class="form-group">
+                        <label>UPI ID</label>
+                        <input type="text" id="requestUpiId" placeholder="yourname@paytm or yourname@phonepe">
+                    </div>
                 </div>
                 <button type="submit" class="btn-submit">📝 Submit Request</button>
                 <button type="button" class="btn-submit btn-close" onclick="closeModal('requestModal')">Close</button>
@@ -647,6 +664,9 @@
         async function openRequestModal() {
             // Load districts and categories dynamically
             await loadDistrictsAndCategories();
+            // Reset to bank account and show appropriate fields
+            document.getElementById('requestReceiveMethod').value = 'bank_account';
+            toggleRequestReceiveFields();
             openModal('requestModal');
         }
         
@@ -682,6 +702,28 @@
             }
         }
         
+        function toggleRequestReceiveFields() {
+            const method = document.getElementById('requestReceiveMethod').value;
+            const bankFields = document.getElementById('requestBankFields');
+            const upiFields = document.getElementById('requestUpiFields');
+            
+            if (method === 'bank_account') {
+                bankFields.style.display = 'block';
+                upiFields.style.display = 'none';
+                document.getElementById('requestAccountNumber').required = true;
+                document.getElementById('requestBankName').required = true;
+                document.getElementById('requestIfscCode').required = true;
+                document.getElementById('requestUpiId').required = false;
+            } else if (method === 'upi') {
+                bankFields.style.display = 'none';
+                upiFields.style.display = 'block';
+                document.getElementById('requestAccountNumber').required = false;
+                document.getElementById('requestBankName').required = false;
+                document.getElementById('requestIfscCode').required = false;
+                document.getElementById('requestUpiId').required = true;
+            }
+        }
+        
         async function submitRequest(e) {
             e.preventDefault();
             const name = document.getElementById('requestName').value;
@@ -689,16 +731,35 @@
             const category_id = document.getElementById('requestCategory').value;
             const amount = document.getElementById('requestAmount').value;
             const description = document.getElementById('requestDescription').value;
-            const account_number = document.getElementById('requestAccountNumber').value;
-            const bank_name = document.getElementById('requestBankName').value;
-            const ifsc_code = document.getElementById('requestIfscCode').value;
+            const receive_method = document.getElementById('requestReceiveMethod').value;
+            
+            // Collect bank or UPI details based on selection
+            let receive_details = { method: receive_method };
+            if (receive_method === 'bank_account') {
+                receive_details.account_number = document.getElementById('requestAccountNumber').value;
+                receive_details.bank_name = document.getElementById('requestBankName').value;
+                receive_details.ifsc_code = document.getElementById('requestIfscCode').value;
+            } else if (receive_method === 'upi') {
+                receive_details.upi_id = document.getElementById('requestUpiId').value;
+            }
             
             try {
                 const response = await fetch('/api/submit-request', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     credentials: 'include',
-                    body: JSON.stringify({name, district_id, category_id, amount, description, account_number, bank_name, ifsc_code})
+                    body: JSON.stringify({
+                        name, 
+                        district_id, 
+                        category_id, 
+                        amount, 
+                        description,
+                        receive_method,
+                        account_number: receive_details.account_number,
+                        bank_name: receive_details.bank_name,
+                        ifsc_code: receive_details.ifsc_code,
+                        upi_id: receive_details.upi_id
+                    })
                 });
                 
                 const data = await response.json();
