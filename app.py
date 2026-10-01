@@ -188,20 +188,30 @@ def submit_request():
         
         new_request = db.create_request(request_data)
         
-        # Save requester bank details
+        # Save requester bank/UPI details
+        receive_method = data.get('receive_method', 'bank_account')
         account_number = data.get('account_number')
         bank_name = data.get('bank_name')
         ifsc_code = data.get('ifsc_code')
-        if account_number or bank_name or ifsc_code:
+        upi_id = data.get('upi_id')
+        
+        if account_number or bank_name or ifsc_code or upi_id:
             try:
-                db.create_bank_details({
+                bank_details_data = {
                     'user_id': session['user_id'],
-                    'account_number': account_number,
-                    'bank_name': bank_name,
-                    'ifsc_code': ifsc_code
-                })
+                    'receive_method': receive_method
+                }
+                
+                if receive_method == 'bank_account':
+                    bank_details_data['account_number'] = account_number
+                    bank_details_data['bank_name'] = bank_name
+                    bank_details_data['ifsc_code'] = ifsc_code
+                elif receive_method == 'upi':
+                    bank_details_data['upi_id'] = upi_id
+                
+                db.create_bank_details(bank_details_data)
             except Exception as bank_err:
-                print(f'[WARN] Failed to save bank details: {bank_err}', file=sys.stderr)
+                print(f'[WARN] Failed to save bank/UPI details: {bank_err}', file=sys.stderr)
         
         return jsonify({'success': True, 'request': new_request})
     except Exception as e:
