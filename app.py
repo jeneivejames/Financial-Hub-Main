@@ -4,6 +4,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import sys
 import random
+import qrcode
+from io import BytesIO
+import base64
 
 # Set up template folder for both Databricks and Vercel
 # Vercel uses /var/task/, Databricks uses regular paths
@@ -233,7 +236,7 @@ def donate():
         amount = data.get('amount')
         
         payment_data = {
-            'request_id': str(request_id),  # Ensure string/UUID format
+            'request_id': request_id,  # Keep as-is (UUID or integer based on DB schema)
             'donor_id': donor_id,  # Can be None for guest donations
             'amount': float(amount) if amount else 0,  # Ensure float
             'payment_method': data.get('payment_method', 'bank_transfer'),
@@ -317,6 +320,53 @@ def get_request(request_id):
     help_request = db.get_request_by_id(request_id)
     payments = db.get_payments_for_request(request_id)
     return jsonify({'request': help_request, 'payments': payments})
+
+# ========== UPI QR CODE GENERATOR (FREE) ==========
+@app.route('/api/generate-upi-qr/<request_id>')
+def generate_upi_qr(request_id):
+    try:
+        help_request = db.get_request_by_id(request_id)
+        if not help_request:
+            return jsonify({'error': 'Request not found'}), 404
+        
+        # Get requester's bank details
+        bank_details = db.get_bank_details_by_user(help_request['user_id'])
+        
+        if not bank_details:
+            return jsonify({'error': 'No payment details found'}), 404
+        
+        # Generate UPI payment string
+        if bank_details.get('receive_method') == 'upi' and bank_details.get('upi_id'):
+            upi_id = bank_details['upi_id']
+            name = help_request['name']
+            amount = help_request['amount_needed']
+            
+            # UPI deep link format
+            upi_string = f"upi://pay?pa={upi_id}&pn={name}&am={amount}&cu=INR&tn=Donation for {name}"
+            
+            # Generate QR code
+            qr = qrcode.QRCode(version=1, box_size=10, border=4)
+            qr.add_data(upi_string)
+            qr.make(fit=True)
+            
+            img = qr.make_image(fill_color="black", back_color="white")
+            
+            # Convert to base64
+            buffered = BytesIO()
+            img.save(buffered, format="PNG")
+            img_str = base64.b64encode(buffered.getvalue()).decode()
+            
+            return jsonify({
+                'success': True,
+                'qr_code': f'data:image/png;base64,{img_str}',
+                'upi_id': upi_id,
+                'upi_link': upi_string
+            })
+        else:
+            return jsonify({'error': 'UPI ID not available for this request'}), 400
+            
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # Vercel will handle the app execution
 # Expose the app object for WSGI
