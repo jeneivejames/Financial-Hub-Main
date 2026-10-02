@@ -436,9 +436,52 @@
     <div class="modal" id="donateModal">
         <div class="modal-content">
             <h2 class="modal-header">💝 Make a Donation</h2>
-            <p style="text-align: center; color: #777; margin-bottom: 1rem;">No registration required • Donate instantly</p>
+            <p style="text-align: center; color: #777; margin-bottom: 1rem;">Scan QR or Click Pay Button</p>
             <div id="donateMessage"></div>
-            <form onsubmit="submitDonation(event)">
+            
+            <!-- UPI QR Code Section (FREE Payment) -->
+            <div id="upiQrSection" style="text-align: center; display:none;">
+                <div style="margin: 1rem 0;">
+                    <strong style="font-size: 1.2rem;">Donating to: <span id="qrRecipientName" style="color: #667eea;"></span></strong>
+                </div>
+                <div style="margin: 1rem 0;">
+                    <strong style="font-size: 1.5rem; color: #43e97b;">₹<span id="qrAmount"></span></strong>
+                </div>
+                
+                <div id="qrCodeContainer" style="margin: 2rem auto; max-width: 300px;">
+                    <img id="qrCodeImage" src="" alt="UPI QR Code" style="width: 100%; border: 3px solid #667eea; border-radius: 10px; padding: 10px; background: white;">
+                </div>
+                
+                <div style="margin: 1.5rem 0;">
+                    <p style="color: #555; margin-bottom: 1rem;"><strong>Pay via UPI:</strong></p>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <!-- Mobile: Direct UPI Link -->
+                        <a id="upiDeepLink" href="" class="btn-submit" style="text-decoration: none; display: block;" target="_blank">
+                            📱 Pay with UPI App
+                        </a>
+                        <!-- Desktop: Show UPI ID -->
+                        <div style="background: #f5f7fa; padding: 1rem; border-radius: 10px;">
+                            <small style="color: #666;">UPI ID:</small><br>
+                            <strong id="displayUpiId" style="color: #667eea; font-size: 1.1rem;"></strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: #fff3cd; padding: 1rem; border-radius: 10px; margin-top: 1.5rem; border-left: 4px solid #ffc107;">
+                    <p style="color: #856404; margin: 0; font-size: 0.9rem;">
+                        <strong>Note:</strong> After payment, the requester will be notified. Please save your payment screenshot for verification.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Loading State -->
+            <div id="qrLoading" style="text-align: center; padding: 2rem; display: none;">
+                <div style="font-size: 2rem;">⏳</div>
+                <p>Loading payment details...</p>
+            </div>
+            
+            <!-- Fallback: Manual Payment Form (if UPI not available) -->
+            <form id="manualDonateForm" onsubmit="submitDonation(event)" style="display:none;">
                 <input type="hidden" id="donateRequestId">
                 <div class="form-group">
                     <label>Donating to:</label>
@@ -776,30 +819,50 @@
             }
         }
         
-        function openDonateModal(requestId, name, amount) {
-            // No login required! Anyone can donate
+        async function openDonateModal(requestId, name, amount) {
+            // FREE UPI Payment - No Gateway Fees!
             console.log('openDonateModal called with:', {requestId, name, amount});
-            console.log('Modal element exists:', !!document.getElementById('donateModal'));
-            console.log('All required elements exist:', {
-                donateRequestId: !!document.getElementById('donateRequestId'),
-                donateRecipientName: !!document.getElementById('donateRecipientName'),
-                donateAmount: !!document.getElementById('donateAmount'),
-                donateMethod: !!document.getElementById('donateMethod')
-            });
+            
             try {
-                document.getElementById('donateRequestId').value = requestId;
-                document.getElementById('donateRecipientName').textContent = name;
-                document.getElementById('donateAmount').value = amount;
-                
-                // Reset to bank transfer (default) and show appropriate fields
-                document.getElementById('donateMethod').value = 'bank_transfer';
-                togglePaymentFields();
-                
                 openModal('donateModal');
-                console.log('Modal opened successfully');
+                
+                // Show loading
+                document.getElementById('qrLoading').style.display = 'block';
+                document.getElementById('upiQrSection').style.display = 'none';
+                document.getElementById('manualDonateForm').style.display = 'none';
+                
+                // Fetch UPI QR code
+                const response = await fetch(`/api/generate-upi-qr/${requestId}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Display QR code and payment details
+                    document.getElementById('qrRecipientName').textContent = name;
+                    document.getElementById('qrAmount').textContent = amount;
+                    document.getElementById('qrCodeImage').src = data.qr_code;
+                    document.getElementById('displayUpiId').textContent = data.upi_id;
+                    document.getElementById('upiDeepLink').href = data.upi_link;
+                    
+                    // Show UPI section
+                    document.getElementById('qrLoading').style.display = 'none';
+                    document.getElementById('upiQrSection').style.display = 'block';
+                } else {
+                    // UPI not available, show manual form
+                    document.getElementById('qrLoading').style.display = 'none';
+                    document.getElementById('donateMessage').innerHTML = '<div class="message error">' + (data.error || 'UPI payment not available for this request') + '</div>';
+                    document.getElementById('manualDonateForm').style.display = 'block';
+                    
+                    // Setup manual form
+                    document.getElementById('donateRequestId').value = requestId;
+                    document.getElementById('donateRecipientName').textContent = name;
+                    document.getElementById('donateAmount').value = amount;
+                    document.getElementById('donateMethod').value = 'bank_transfer';
+                    togglePaymentFields();
+                }
             } catch (error) {
                 console.error('Error opening donate modal:', error);
-                alert('Error opening donation form: ' + error.message);
+                document.getElementById('qrLoading').style.display = 'none';
+                document.getElementById('donateMessage').innerHTML = '<div class="message error">Error loading payment details: ' + error.message + '</div>';
             }
         }
         
