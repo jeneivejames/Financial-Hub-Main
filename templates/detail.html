@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ request.name }} - Help Request Details</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+        
+        /* Navigation */
+        .navbar {
+            background: white;
+            padding: 1.2rem 5%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #1CABE2;
+            cursor: pointer;
+        }
+        
+        .btn-back {
+            padding: 0.7rem 1.5rem;
+            background: #1CABE2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-back:hover {
+            background: #0d8fc7;
+        }
+        
+        /* Detail Container */
+        .detail-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        
+        /* Hero Image */
+        .detail-hero {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+        }
+        
+        .detail-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #f8f9fa;
+        }
+        
+        .detail-hero-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            padding: 2rem;
+            color: white;
+        }
+        
+        .detail-hero-overlay h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .detail-hero-overlay .category-badge {
+            display: inline-block;
+            background: #1CABE2;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        /* Content Area */
+        .detail-content {
+            padding: 2rem 3rem;
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+        }
+        
+        /* Left Column */
+        .detail-main {
+            border-right: 1px solid #e0e0e0;
+            padding-right: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            border-bottom: 3px solid #1CABE2;
+            padding-bottom: 0.5rem;
+        }
+        
+        .detail-section {
+            margin-bottom: 2rem;
+        }
+        
+        .detail-text {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #555;
+            text-align: justify;
+        }
+        
+        .info-row {
+            display: flex;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #666;
+            width: 150px;
+        }
+        
+        .info-value {
+            color: #333;
+            flex: 1;
+        }
+        
+        /* Right Column - Donation Card */
+        .donation-card {
+            position: sticky;
+            top: 2rem;
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 2px solid #1CABE2;
+        }
+        
+        .amount-display {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .amount-raised {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #26890D;
+            margin-bottom: 0.5rem;
+        }
+        
+        .amount-goal {
+            font-size: 1.2rem;
+            color: #666;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #26890D 0%, #43e97b 100%);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        .btn-donate-detail {
+            width: 100%;
+            padding: 1.2rem;
+            background: #EF4123;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1rem;
+        }
+        
+        .btn-donate-detail:hover {
+            background: #d63516;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239,65,35,0.3);
+        }
+        
+        .btn-goal-reached {
+            background: #26890D !important;
+            cursor: default !important;
+        }
+        
+        .btn-goal-reached:hover {
+            transform: none !important;
+        }
+        
+        .share-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #e0e0e0;
+        }
+        
+        .share-title {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        
+        .trust-badge {
+            background: #e9f7fe;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: #666;
+            text-align: center;
+        }
+        
+        /* Documents Section */
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .document-item {
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .document-item:hover {
+            background: #e9f7fe;
+            transform: translateY(-2px);
+        }
+        
+        .document-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-approved {
+            background: #D4EDDA;
+            color: #155724;
+            border: 1px solid #C3E6CB;
+        }
+        
+        /* Modal - Reuse from index.html */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 8px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo" onclick="window.location.href='/'">💙 Financial Help Hub</div>
+        <a href="/" class="btn-back">← Back to All Requests</a>
+    </nav>
+    
+    <!-- Detail Container -->
+    <div class="detail-container">
+        <!-- Hero Image -->
+        <div class="detail-hero">
+            {% if request.photo %}
+                <img src="{{ request.photo }}" alt="{{ request.name }}">
+            {% else %}
+                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=1200&h=400&fit=crop" alt="{{ request.name }}">
+            {% endif %}
+            <div class="detail-hero-overlay">
+                <h1>{{ request.name }}{% if request.age %}, {{ request.age }} years old{% endif %}</h1>
+                <span class="category-badge">{{ request.categories.name }}</span>
+                {% if request.approval_status == 'approved' %}
+                    <span class="status-badge status-approved" style="margin-left: 1rem;">✅ Verified</span>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Content Area -->
+        <div class="detail-content">
+            <div class="detail-grid">
+                <!-- Left Column - Details -->
+                <div class="detail-main">
+                    <!-- Short Description -->
+                    {% if request.short_description %}
+                    <div class="detail-section">
+                        <h2 class="section-title">📋 Summary</h2>
+                        <p class="detail-text" style="font-size: 1.2rem; font-weight: 600; color: #1CABE2;">{{ request.short_description }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Current Situation -->
+                    {% if request.current_situation %}
+                    <div class="detail-section">
+                        <h2 class="section-title">📖 Current Situation</h2>
+                        <p class="detail-text">{{ request.current_situation }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Why Money is Needed -->
+                    {% if request.why_need_money %}
+                    <div class="detail-section">
+                        <h2 class="section-title">💰 Why This Help is Needed</h2>
+                        <p class="detail-text">{{ request.why_need_money }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Impact -->
+                    {% if request.impact %}
+                    <div class="detail-section">
+                        <h2 class="section-title">🌟 How Your Help Will Impact</h2>
+                        <p class="detail-text">{{ request.impact }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Basic Information -->
+                    <div class="detail-section">
+                        <h2 class="section-title">ℹ️ Basic Information</h2>
+                        <div class="info-row">
+                            <div class="info-label">📍 Location:</div>
+                            <div class="info-value">{{ request.districts.name }}</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">📂 Category:</div>
+                            <div class="info-value">{{ request.categories.name }}</div>
+                        </div>
+                        {% if request.age %}
+                        <div class="info-row">
+                            <div class="info-label">🎂 Age:</div>
+                            <div class="info-value">{{ request.age }} years old</div>
+                        </div>
+                        {% endif %}
+                        <div class="info-row">
+                            <div class="info-label">📅 Requested On:</div>
+                            <div class="info-value">{{ request.created_at if request.created_at else 'Recently' }}</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Supporting Documents -->
+                    {% if request.documents %}
+                    <div class="detail-section">
+                        <h2 class="section-title">📎 Supporting Documents</h2>
+                        <div class="documents-grid">
+                            <div class="document-item">
+                                <div class="document-icon">📄</div>
+                                <div style="font-size: 0.85rem; color: #666;">Medical Records</div>
+                            </div>
+                            <div class="document-item">
+                                <div class="document-icon">🧾</div>
+                                <div style="font-size: 0.85rem; color: #666;">Bills & Receipts</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Right Column - Donation Card -->
+                <div>
+                    <div class="donation-card">
+                        <div class="amount-display">
+                            <div class="amount-raised">₹{{ '{:,.0f}'.format(request.total_received or 0) }}</div>
+                            <div class="amount-goal">raised of ₹{{ '{:,.0f}'.format(request.amount_needed) }} goal</div>
+                        </div>
+                        
+                        <div class="progress-bar">
+                            {% set progress = ((request.total_received or 0) / request.amount_needed * 100) if request.amount_needed > 0 else 0 %}
+                            <div class="progress-fill" style="width: {{ progress if progress <= 100 else 100 }}%"></div>
+                        </div>
+                        
+                        <div style="text-align: center; margin-bottom: 1.5rem; color: #666; font-size: 0.9rem;">
+                            {% set progress_percent = ((request.total_received or 0) / request.amount_needed * 100) if request.amount_needed > 0 else 0 %}
+                            {{ '%.1f' % progress_percent }}% of goal reached
+                        </div>
+                        
+                        {% if request.approval_status == 'approved' %}
+                            {% set goal_reached = (request.total_received or 0) >= request.amount_needed %}
+                            {% if goal_reached %}
+                                <button class="btn-donate-detail btn-goal-reached">✅ Goal Reached - Thank You!</button>
+                            {% else %}
+                                <button class="btn-donate-detail" onclick="openDonateModal('{{ request.id }}', '{{ request.name }}', {{ request.amount_needed }})">💝 Donate Now</button>
+                            {% endif %}
+                        {% endif %}
+                        
+                        <div class="trust-badge">
+                            ✅ Verified Request<br>
+                            🔒 Secure Payment<br>
+                            💯 100% Goes to Beneficiary
+                        </div>
+                        
+                        <div class="share-section">
+                            <div class="share-title">Share this campaign</div>
+                            <div style="text-align: center; margin-top: 0.5rem;">
+                                <button style="padding: 0.5rem 1rem; margin: 0 0.3rem; background: #1CABE2; color: white; border: none; border-radius: 5px; cursor: pointer;">📱 Share</button>
+                                <button style="padding: 0.5rem 1rem; margin: 0 0.3rem; background: #25D366; color: white; border: none; border-radius: 5px; cursor: pointer;">💬 WhatsApp</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Donate Modal (Simple - you can enhance this) -->
+    <div class="modal" id="donateModal">
+        <div class="modal-content">
+            <h2>💝 Support {{ request.name }}</h2>
+            <p>Redirecting to donation page...</p>
+            <button onclick="window.location.href='/'" style="margin-top: 1rem; padding: 1rem 2rem; background: #1CABE2; color: white; border: none; border-radius: 5px; cursor: pointer;">Back to Home</button>
+        </div>
+    </div>
+    
+    <script>
+        function openDonateModal(requestId, name, amount) {
+            // Redirect to home page with donate modal
+            window.location.href = '/?donate=' + requestId;
+        }
+    </script>
+</body>
+</html>

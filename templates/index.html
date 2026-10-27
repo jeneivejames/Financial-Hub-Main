@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Financial Help Hub - Together We Make a Difference</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,171 +15,773 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #FAFBFC;
             min-height: 100vh;
+            color: #4A5568;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        
+        /* Top Action Bar - UNICEF Style */
+        .top-action-bar {
+            background: #1CABE2;
+            padding: 0.8rem 5%;
+            text-align: right;
+        }
+        
+        .top-action-bar button {
+            padding: 0.7rem 1.8rem;
+            margin-left: 0.8rem;
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .top-action-bar button:hover {
+            background: white;
+            color: #1CABE2;
+        }
+        
+        .btn-donate-header {
+            background: #EF4123 !important;
+            border-color: #EF4123 !important;
+        }
+        
+        .btn-donate-header:hover {
+            background: #d63516 !important;
+            border-color: #d63516 !important;
+            color: white !important;
         }
         
         /* Navigation */
         .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 1rem 5%;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: white;
+            padding: 1.2rem 5%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
         .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #A8D8EA;
         }
         
         .nav-buttons button {
-            padding: 0.7rem 1.5rem;
-            margin-left: 1rem;
+            padding: 0.6rem 1.3rem;
+            margin-left: 0.8rem;
             border: none;
-            border-radius: 25px;
+            border-radius: 20px;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 500;
             transition: all 0.3s;
+            font-size: 0.85rem;
         }
         
         .btn-login {
             background: transparent;
-            color: #667eea;
-            border: 2px solid #667eea;
+            color: #A8D8EA;
+            border: 2px solid #E8F4F8;
         }
         
         .btn-login:hover {
-            background: #667eea;
-            color: white;
+            background: #E8F4F8;
+            color: #5A7D9A;
+            border-color: #E8F4F8;
         }
         
         .btn-signup {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: #FFB7C3;
             color: white;
+            border: 2px solid #FFB7C3;
         }
         
         .btn-signup:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(245,87,108,0.4);
+            background: #FFA8B9;
+            border-color: #FFA8B9;
         }
         
-        /* Hero Section with Quote */
+        /* Hero Section - UNICEF Style */
         .hero {
-            padding: 4rem 5%;
+            position: relative;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-align: center;
             color: white;
+            overflow: hidden;
+            background: #000;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)),
+                        url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            z-index: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            padding: 3rem 5%;
+            max-width: 1000px;
+        }
+        
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero-description {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            font-weight: 400;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .quote-container {
             background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2rem;
-            margin: 2rem auto;
-            max-width: 800px;
-            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(5px);
+            border-radius: 8px;
+            padding: 1.5rem 2rem;
+            margin: 2rem auto 0;
+            max-width: 700px;
+            border-left: 4px solid #1CABE2;
         }
         
         .quote-text {
-            font-size: 1.8rem;
+            font-size: 1.2rem;
             font-style: italic;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
             line-height: 1.6;
+            font-weight: 300;
         }
         
         .quote-author {
-            font-size: 1.2rem;
+            font-size: 1rem;
             opacity: 0.9;
+            font-weight: 500;
         }
         
-        .hero h1 {
-            font-size: 3rem;
-            margin: 2rem 0 1rem;
+        /* Requests Sidebar */
+        /* Sticky Donate Button at Top */
+        .sticky-donate-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #A8D8EA 0%, #AAD9CD 100%);
+            padding: 0.8rem 5%;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
         }
         
-        .hero p {
-            font-size: 1.3rem;
+        .sticky-donate-bar .donate-text {
+            color: #2D3748;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        
+        .sticky-donate-bar .btn-sticky-donate {
+            padding: 0.65rem 2rem;
+            background: white;
+            color: #5A7D9A;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .sticky-donate-bar .btn-sticky-donate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            background: #FFB7C3;
+            color: white;
+        }
+        
+        /* Add padding to body to account for sticky bar */
+        body {
+            padding-top: 70px;
+        }
+        
+        .requests-sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            max-height: calc(100vh - 150px);
+            overflow-y: scroll;
+            overflow-x: hidden;
+            position: sticky;
+            top: 90px;
+        }
+        
+        .requests-sidebar::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        .requests-sidebar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+            margin: 0.5rem 0;
+        }
+        
+        .requests-sidebar::-webkit-scrollbar-thumb {
+            background: #A8D8EA;
+            border-radius: 10px;
+        }
+        
+        .requests-sidebar::-webkit-scrollbar-thumb:hover {
+            background: #90C8DB;
+        }
+        
+        .sidebar-header {
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid #E8F4F8;
+        }
+        
+        .sidebar-header h3 {
+            font-size: 1.1rem;
+            color: #2D3748;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+        }
+        
+        .sidebar-header p {
+            color: #718096;
+            font-size: 0.8rem;
+        }
+        
+        .requests-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        /* Request Cards Container - Save Life Style */
+        .requests-section {
+            padding: 3rem 5%;
+            background: white;
+            min-height: auto;
+            display: none;
+        }
+        
+        /* Hero Banner Section */
+        /* Main Content Section with Background */
+        .main-content-section {
+            background: #FAFBFC;
+            min-height: 100vh;
+        }
+        
+        .content-with-sidebar {
+            display: block;
+            padding: 0;
+            max-width: 100%;
+            margin: 0;
+        }
+        
+        .hero-compact {
+            background: linear-gradient(135deg, #A8D8EA 0%, #B5EAD7 100%);
+            padding: 3rem 5%;
+            text-align: center;
+            color: white;
+        }
+        
+        .hero-compact h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        
+        .hero-compact p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
             opacity: 0.95;
         }
         
-        /* Request Cards Container */
-        .requests-section {
+        .impact-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 900px;
+            margin: 2rem auto 0;
+        }
+        
+        .stat-item {
+            background: rgba(255,255,255,0.2);
+            padding: 1.5rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .filter-section {
+            background: white;
+            padding: 2rem 5%;
+            border-bottom: 1px solid #E8F4F8;
+            position: sticky;
+            top: 70px;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .filter-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .search-bar {
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 0.9rem 1.5rem;
+            border: 2px solid #E8F4F8;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .search-bar input:focus {
+            border-color: #A8D8EA;
+            box-shadow: 0 0 0 3px rgba(168, 216, 234, 0.1);
+        }
+        
+        .category-tabs {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .category-tab {
+            padding: 0.7rem 1.5rem;
+            border: 2px solid #E8F4F8;
+            background: white;
+            color: #718096;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .category-tab:hover, .category-tab.active {
+            background: #A8D8EA;
+            color: white;
+            border-color: #A8D8EA;
+        }
+        
+        .fundraisers-grid {
+            max-width: 1400px;
+            margin: 0 auto;
             padding: 3rem 5%;
-            background: #f5f7fa;
         }
         
         .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            color: #333;
-            margin-bottom: 3rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2D3748;
+            margin-bottom: 2rem;
         }
         
-        .requests-grid {
+        .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 2rem;
         }
         
-        /* Colorful Request Cards */
+        .hero-content-area {
+            padding: 3rem 2rem;
+        }
+        
+        .hero-content-area h1 {
+            font-size: 2.75rem !important;
+            font-weight: 700 !important;
+            line-height: 1.2 !important;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.08);
+            margin-bottom: 1.2rem !important;
+            color: #2D3748 !important;
+        }
+        
+        .hero-content-area .hero-label {
+            font-size: 0.8rem !important;
+            font-weight: 600 !important;
+            letter-spacing: 1.5px !important;
+            color: #A8D8EA !important;
+            margin-bottom: 0.8rem !important;
+            text-transform: uppercase;
+        }
+        
+        .hero-banner {
+            background: transparent;
+            color: #2c3e50;
+        }
+        
+        .hero-banner-content h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+            color: #2D3748;
+        }
+        
+        .hero-banner-content h1 .highlight {
+            color: #AAD9CD;
+        }
+        
+        .hero-banner-content p {
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 1.8rem;
+            color: #4A5568;
+            font-weight: 400;
+        }
+        
+        .hero-banner-content .hero-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #666;
+        }
+        
+        .hero-banner-image {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .hero-banner-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+        }
+        
+        .banner-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn-banner-primary {
+            padding: 0.9rem 2.5rem;
+            background: linear-gradient(135deg, #FFB7C3 0%, #FFA8B9 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 183, 195, 0.35);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+        
+        .btn-banner-primary:hover {
+            background: linear-gradient(135deg, #FFA8B9 0%, #FF99AA 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 183, 195, 0.45);
+        }
+        
+        .btn-banner-secondary {
+            padding: 0.9rem 2.5rem;
+            background: white;
+            color: #A8D8EA;
+            border: 2px solid #A8D8EA;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 10px rgba(168, 216, 234, 0.15);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+        
+        .btn-banner-secondary:hover {
+            background: #A8D8EA;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(168, 216, 234, 0.3);
+        }
+        
+        .section-header {
+            margin-bottom: 2rem;
+        }
+        
+        .section-label {
+            color: #A8D8EA;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        
+        .section-subtitle {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        
+        /* Category Filters */
+        .category-filters {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .category-filter {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .category-filter:hover, .category-filter.active {
+            border-color: #1CABE2;
+            background: #e9f7fe;
+            color: #1CABE2;
+        }
+        
+        .category-icon {
+            font-size: 1.2rem;
+        }
+        
+        /* Horizontal Scrolling Container */
+        .requests-scroll-wrapper {
+            position: relative;
+            margin: 0 -5%;
+            padding: 0 5%;
+        }
+        
+        .requests-scroll {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding-bottom: 1rem;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .requests-scroll::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .requests-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .requests-scroll::-webkit-scrollbar-thumb {
+            background: #1CABE2;
+            border-radius: 10px;
+        }
+        
+        .scroll-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            border: 2px solid #1CABE2;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .scroll-arrow:hover {
+            background: #1CABE2;
+            color: white;
+        }
+        
+        .scroll-arrow-left {
+            left: 1rem;
+        }
+        
+        .scroll-arrow-right {
+            right: 1rem;
+        }
+        
+        /* Person Cards - Sidebar Style */
         .request-card {
             background: white;
-            border-radius: 20px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s;
             cursor: pointer;
+            border: 1px solid #E8F4F8;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
         
         .request-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(168, 216, 234, 0.2);
+            border-color: #A8D8EA;
         }
         
-        .card-header {
-            padding: 1.5rem;
+        .card-urgency {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #FFB7C3;
             color: white;
-            font-weight: bold;
+            padding: 0.4rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 5;
+            box-shadow: 0 2px 8px rgba(255, 183, 195, 0.4);
         }
         
-        /* Vibrant gradient backgrounds for cards */
-        .card-header.gradient-1 {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .card-supporters {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+            color: #718096;
+            font-size: 0.85rem;
         }
         
-        .card-header.gradient-2 {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        .card-supporters .icon {
+            color: #A8D8EA;
         }
         
-        .card-header.gradient-3 {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        .card-verified {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.75rem;
+            color: #AAD9CD;
+            font-weight: 600;
+            margin-top: 0.5rem;
         }
         
-        .card-header.gradient-4 {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        /* Progress Bar */
+        .progress-container {
+            margin: 1rem 0 0.5rem;
         }
         
-        .card-header.gradient-5 {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
         }
         
-        .card-header.gradient-6 {
-            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #B5EAD7 0%, #AAD9CD 100%);
+            border-radius: 10px;
+            transition: width 0.3s ease;
         }
+        
+        .progress-text {
+            font-size: 0.85rem;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        /* Color variants for donate buttons */
+        .btn-donate.color-blue { background: #A8D8EA; }
+        .btn-donate.color-blue:hover { background: #90C8DB; }
+        .btn-donate.color-green { background: #B5EAD7; }
+        .btn-donate.color-green:hover { background: #A0DCC8; }
+        .btn-donate.color-orange { background: #FFD4A3; }
+        .btn-donate.color-orange:hover { background: #FFC78F; }
+        .btn-donate.color-purple { background: #D4C5F9; }
+        .btn-donate.color-purple:hover { background: #C2AFED; }
         
         .card-body {
-            padding: 1.5rem;
+            padding: 1rem;
+        }
+        
+        .card-body h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2D3748;
+            margin-bottom: 0.5rem;
         }
         
         .card-info {
-            margin: 0.5rem 0;
-            color: #555;
+            margin: 0.4rem 0;
+            color: #718096;
+            font-size: 0.85rem;
         }
         
         .amount-info {
@@ -192,34 +797,79 @@
         }
         
         .amount-label {
-            font-size: 0.9rem;
-            color: #777;
+            font-size: 0.75rem;
+            color: #718096;
             margin-bottom: 0.3rem;
+            font-weight: 500;
         }
         
         .amount-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #667eea;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #A8D8EA;
         }
         
         .btn-donate {
             width: 100%;
-            padding: 1rem;
-            margin-top: 1rem;
+            padding: 0.7rem;
+            margin-top: 0.8rem;
             border: none;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            background: #FFB7C3;
             color: white;
-            font-size: 1.1rem;
+            font-size: 0.8rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(255, 183, 195, 0.3);
         }
         
         .btn-donate:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        }
+        
+        /* Approval Status Badge - UNICEF Clean Style */
+        .status-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-top: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-pending {
+            background: #FFF3CD;
+            color: #856404;
+            border: 1px solid #FFE69C;
+        }
+        
+        .status-approved {
+            background: #D4EDDA;
+            color: #155724;
+            border: 1px solid #C3E6CB;
+        }
+        
+        .status-rejected {
+            background: #F8D7DA;
+            color: #721C24;
+            border: 1px solid #F5C6CB;
+        }
+        
+        .pending-message {
+            text-align: center;
+            padding: 1.2rem;
+            background: #FFF3CD;
+            border-radius: 4px;
+            color: #856404;
+            font-weight: 500;
+            margin-top: 1.5rem;
+            border: 1px solid #FFE69C;
         }
         
         /* Modal Styles */
@@ -242,12 +892,44 @@
         
         .modal-content {
             background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            max-width: 500px;
+            padding: 2.5rem;
+            border-radius: 8px;
+            max-width: 700px;
             width: 90%;
             max-height: 90vh;
             overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 35px;
+            height: 35px;
+            border: none;
+            background: #f0f0f0;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            color: #666;
+            z-index: 10;
+        }
+        
+        .modal-close:hover {
+            background: #EF4123;
+            color: white;
+            transform: rotate(90deg);
+        }
+        
+        .modal-content.large {
+            max-width: 900px;
         }
         
         .modal-header {
@@ -269,33 +951,47 @@
         
         .form-group input, .form-group select, .form-group textarea {
             width: 100%;
-            padding: 0.8rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
+            padding: 0.9rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             font-size: 1rem;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
         
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #1CABE2;
+            box-shadow: 0 0 0 2px rgba(28,171,226,0.1);
         }
         
         .btn-submit {
             width: 100%;
-            padding: 1rem;
+            padding: 1.1rem;
             border: none;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            background: #EF4123;
             color: white;
             font-size: 1.1rem;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+        }
+        
+        .btn-submit:hover {
+            background: #d63516;
         }
         
         .btn-close {
-            background: #e0e0e0;
-            color: #555;
+            background: #f8f9fa;
+            color: #333;
             margin-top: 1rem;
+            border: 1px solid #ddd;
+        }
+        
+        .btn-close:hover {
+            background: #e9ecef;
         }
         
         .message {
@@ -315,78 +1011,252 @@
             color: #721c24;
         }
         
-        /* Footer */
+        /* Footer - UNICEF Style */
         .footer {
-            background: #2c3e50;
+            background: #00AEEF;
             color: white;
             text-align: center;
-            padding: 2rem;
-            margin-top: 3rem;
+            padding: 3rem 5%;
+            margin-top: 0;
+        }
+        
+        .footer p {
+            margin: 0.5rem 0;
+            font-size: 1rem;
+        }
+        
+        /* File Upload Styling */
+        .file-upload-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-upload-input {
+            position: absolute;
+            font-size: 100px;
+            opacity: 0;
+            right: 0;
+            top: 0;
+            cursor: pointer;
+        }
+        
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border: 2px dashed #1CABE2;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .file-upload-label:hover {
+            background: #e9f7fe;
+            border-color: #0d8fc7;
+        }
+        
+        .file-preview {
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .file-preview img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+        }
+        
+        /* Person Card with Photo */
+        .person-card-image {
+            width: 100%;
+            height: 220px;
+            object-fit: scale-down;
+            object-position: center;
+            background: #f8f9fa;
+            border-radius: 8px 8px 0 0;
+            padding: 5px;
+        }
+        
+        .person-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: white;
+            color: #333;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        /* Category badge icons */
+        .person-badge::before {
+            content: '🏥';
+            font-size: 1rem;
         }
     </style>
 </head>
 <body>
+    <!-- Sticky Donate Button Bar -->
+    <div class="sticky-donate-bar">
+        <span class="donate-text">❤️ Make a Difference Today!</span>
+        <button class="btn-sticky-donate" onclick="document.getElementById('requestsGrid').scrollIntoView({behavior: 'smooth'})">💝 Donate Now</button>
+    </div>
+    
     <!-- Navigation -->
     <nav class="navbar">
         <div class="logo">💙 Financial Help Hub</div>
         <div class="nav-buttons" id="navButtons">
             {% if user %}
-                <span style="color: #667eea; margin-right: 1rem;">Welcome, {{ user.full_name }}!</span>
+                <span style="color: #1CABE2; margin-right: 1rem; font-weight: 600;">Welcome, {{ user.full_name }}!</span>
                 <button class="btn-signup" onclick="openRequestModal()">Submit Request</button>
                 <button class="btn-login" onclick="logout()">Logout</button>
             {% else %}
                 <button class="btn-login" onclick="openModal('loginModal')">Login</button>
                 <button class="btn-signup" onclick="openModal('signupModal')">Sign Up</button>
-                <a href="/admin" style="margin-left: 10px; color: #667eea; text-decoration: none; font-weight: 600;">🔒 Admin</a>
+                <a href="/admin" style="margin-left: 10px; color: #1CABE2; text-decoration: none; font-weight: 600;">🔒 Admin</a>
             {% endif %}
         </div>
     </nav>
 
-    <!-- Hero Section with Quote -->
-    <section class="hero">
-        <div class="quote-container">
-            <div class="quote-text">"{{ quote.text }}"</div>
-            <div class="quote-author">— {{ quote.author }}</div>
+    <!-- Compact Hero Section -->
+    <section class="hero-compact">
+        <h1>💙 Transform Lives Through Giving</h1>
+        <p>Help children get education, support families with medical needs, and bring hope to those who need it most.</p>
+        
+        <div class="impact-stats">
+            <div class="stat-item">
+                <div class="stat-number">₹{{ '{:,.0f}'.format(requests|sum(attribute='total_received')|default(0)) }}</div>
+                <div class="stat-label">Total Raised</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">{{ requests|selectattr('approval_status', 'equalto', 'approved')|list|length }}</div>
+                <div class="stat-label">Lives Changed</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">{{ requests|length }}</div>
+                <div class="stat-label">Active Campaigns</div>
+            </div>
         </div>
-        <h1>Together We Make a Difference</h1>
-        <p>Help those in need. Every contribution counts.</p>
-        <p style="background: rgba(255,255,255,0.3); padding: 0.8rem 1.5rem; border-radius: 50px; display: inline-block; margin-top: 1rem; font-weight: 500;">
-            ✨ No registration required • Donate instantly • 100% transparent
-        </p>
     </section>
-
-    <!-- Requests Section -->
-    <section class="requests-section">
-        <h2 class="section-title">🌟 People Who Need Your Help</h2>
-        <div class="requests-grid" id="requestsGrid">
+    
+    <!-- Filter & Search Section -->
+    <section class="filter-section">
+        <div class="filter-container">
+            <div class="search-bar">
+                <input type="text" placeholder="🔍 Search campaigns by name, cause, or location..." id="searchInput" onkeyup="filterCards()">
+            </div>
+            <div class="category-tabs">
+                <button class="category-tab active" onclick="filterByCategory('all')">All Causes</button>
+                <button class="category-tab" onclick="filterByCategory('medical')">🏥 Medical</button>
+                <button class="category-tab" onclick="filterByCategory('education')">📚 Education</button>
+                <button class="category-tab" onclick="filterByCategory('emergency')">🚨 Emergency</button>
+                <button class="category-tab" onclick="filterByCategory('urgent')">⚡ Urgent</button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Fundraisers Grid -->
+    <section class="fundraisers-grid">
+        <h2 class="section-title">🌟 Active Fundraisers</h2>
+        <div class="cards-grid" id="requestsGrid">
             {% for req in requests %}
-            <div class="request-card">
-                <div class="card-header gradient-{{ loop.index % 6 + 1 }}">
-                    <div style="font-size: 1.3rem;">{{ req.name }}</div>
-                    <div style="opacity: 0.9; font-size: 0.9rem; margin-top: 0.5rem;">{{ req.districts.name }} | {{ req.categories.name }}</div>
+            <div class="request-card" onclick="window.location.href='/request/{{ req.id }}';" style="cursor: pointer;" data-category="{{ req.categories.name|lower }}">
+                <!-- Person Photo -->
+                <div style="position: relative;" onclick="event.stopPropagation(); window.location.href='/request/{{ req.id }}';">
+                    {% if req.photo %}
+                        <img src="{{ req.photo }}" alt="{{ req.name }}" class="person-card-image">
+                    {% else %}
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=300&fit=crop" alt="{{ req.name }}" class="person-card-image">
+                    {% endif %}
+                    
+                    <!-- Urgency Indicator -->
+                    {% set progress_pct = ((req.total_received or 0) / req.amount_needed * 100) if req.amount_needed > 0 else 0 %}
+                    {% if progress_pct > 75 and progress_pct < 100 %}
+                        <div class="card-urgency">⚡ Almost There!</div>
+                    {% elif progress_pct < 25 %}
+                        <div class="card-urgency" style="background: #FFD4A3;">🆕 New</div>
+                    {% endif %}
+                    
+                    <!-- Category Badge - Bottom Left -->
+                    <div class="person-badge gradient-{{ loop.index % 6 + 1 }}" style="top: auto; bottom: 10px; left: 10px;">{{ req.categories.name }}</div>
                 </div>
+                
                 <div class="card-body">
-                    <p class="card-info">{{ req.description }}</p>
-                    <div class="amount-info">
-                        <div class="amount-needed">
-                            <div class="amount-label">Amount Needed</div>
-                            <div class="amount-value">₹{{ req.amount_needed }}</div>
+                    <!-- Name and Age -->
+                    <h3>{{ req.name }}{% if req.age %}, {{ req.age }}{% endif %}</h3>
+                    
+                    <!-- Verified Badge -->
+                    {% if req.approval_status == 'approved' %}
+                    <div class="card-verified">✅ Verified Campaign</div>
+                    {% endif %}
+                    
+                    <!-- Title/Short Description -->
+                    <div style="font-size: 0.95rem; font-weight: 600; color: #333; margin: 0.5rem 0;">{{ req.short_description or 'Needs Your Support' }}</div>
+                    
+                    <!-- Story Preview -->
+                    <p class="card-info" style="font-size: 0.85rem; color: #666; line-height: 1.5; margin-bottom: 0.8rem; height: 3em; overflow: hidden;">
+                        {{ (req.current_situation or req.description)[:80] }}{% if (req.current_situation or req.description)|length > 80 %}...{% endif %}
+                    </p>
+                    
+                    <!-- Supporter Count -->
+                    <div class="card-supporters">
+                        <span class="icon">👥</span>
+                        <span>{{ (loop.index * 7) % 50 + 5 }} supporters</span>
+                    </div>
+                    
+                    <!-- Progress Bar -->
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            {% set progress = ((req.total_received or 0) / req.amount_needed * 100) if req.amount_needed > 0 else 0 %}
+                            <div class="progress-fill" style="width: {{ progress if progress <= 100 else 100 }}%"></div>
                         </div>
-                        <div class="amount-received">
-                            <div class="amount-label">Received</div>
-                            <div class="amount-value" style="color: #43e97b;">₹{{ req.total_received or 0 }}</div>
+                        <div class="progress-text">
+                            <span style="font-weight: 600; color: #AAD9CD;">₹{{ '{:,.0f}'.format(req.total_received or 0) }} raised</span>
+                            <span style="color: #718096;">₹{{ '{:,.0f}'.format(req.amount_needed) }} goal</span>
                         </div>
                     </div>
-                    <button class="btn-donate" onclick="console.log('Button clicked!'); openDonateModal('{{ req.id }}', '{{ req.name }}', {{ req.amount_needed }})">💝 Donate Now</button>
+                    
+                    <!-- Donate Button - Hide if goal reached -->
+                    {% if req.approval_status == 'approved' %}
+                        {% set goal_reached = (req.total_received or 0) >= req.amount_needed %}
+                        {% if goal_reached %}
+                            <div class="btn-donate" style="background: #B5EAD7; cursor: default;">✅ Goal Reached - Thank You!</div>
+                        {% else %}
+                            <button class="btn-donate" onclick="event.stopPropagation(); console.log('Button clicked!'); openDonateModal('{{ req.id }}', '{{ req.name }}', {{ req.amount_needed }})">💝 Donate Now</button>
+                        {% endif %}
+                    {% elif req.approval_status == 'pending' %}
+                        <div class="btn-donate" style="background: #FFD4A3; cursor: default;">⏳ Pending Approval</div>
+                    {% elif req.approval_status == 'rejected' %}
+                        <div class="btn-donate" style="background: #FFC9C9; cursor: default;">❌ Not Approved</div>
+                    {% endif %}
                 </div>
             </div>
-            {% endfor %}
+                {% endfor %}
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Login Modal -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('loginModal')" title="Close">×</button>
             <h2 class="modal-header">Welcome Back!</h2>
             <div id="loginMessage"></div>
             <form onsubmit="login(event)">
@@ -407,6 +1277,7 @@
     <!-- Signup Modal -->
     <div class="modal" id="signupModal">
         <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('signupModal')" title="Close">×</button>
             <h2 class="modal-header">Join Our Community</h2>
             <div id="signupMessage"></div>
             <form onsubmit="signup(event)">
@@ -435,6 +1306,7 @@
     <!-- Donate Modal -->
     <div class="modal" id="donateModal">
         <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('donateModal')" title="Close">×</button>
             <h2 class="modal-header">💝 Make a Donation</h2>
             <p style="text-align: center; color: #777; margin-bottom: 1rem;">Scan QR or Click Pay Button</p>
             <div id="donateMessage"></div>
@@ -469,8 +1341,34 @@
                 
                 <div style="background: #fff3cd; padding: 1rem; border-radius: 10px; margin-top: 1.5rem; border-left: 4px solid #ffc107;">
                     <p style="color: #856404; margin: 0; font-size: 0.9rem;">
-                        <strong>Note:</strong> After payment, the requester will be notified. Please save your payment screenshot for verification.
+                        <strong>Note:</strong> After payment, please confirm below to update the donation amount.
                     </p>
+                </div>
+                
+                <!-- Payment Confirmation Form -->
+                <div style="margin-top: 1.5rem; padding: 1rem; background: #f8f9fa; border-radius: 10px;">
+                    <h4 style="margin: 0 0 1rem 0; color: #667eea;">✅ Confirm Payment</h4>
+                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">After completing payment in your UPI app, fill this form:</p>
+                    
+                    <div class="form-group" style="margin-bottom: 0.8rem;">
+                        <label style="font-size: 0.9rem;">Amount Paid (₹) *</label>
+                        <input type="number" id="confirmAmount" required style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 0.8rem;">
+                        <label style="font-size: 0.9rem;">UPI Transaction ID (Optional)</label>
+                        <input type="text" id="confirmTransactionId" placeholder="e.g., 123456789012" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 0.8rem;">
+                        <label style="font-size: 0.9rem;">Your Name (Optional)</label>
+                        <input type="text" id="confirmDonorName" placeholder="Anonymous" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    
+                    <button type="button" onclick="confirmPayment()" class="btn-submit" style="width: 100%; margin-top: 0.5rem;">
+                        ✅ I Have Paid - Confirm Donation
+                    </button>
+                    <div id="confirmMessage" style="margin-top: 0.5rem;"></div>
                 </div>
             </div>
             
@@ -550,43 +1448,99 @@
 
     <!-- Request Submission Modal -->
     <div class="modal" id="requestModal">
-        <div class="modal-content">
+        <div class="modal-content large">
+            <button class="modal-close" onclick="closeModal('requestModal')" title="Close">×</button>
             <h2 class="modal-header">📝 Submit Help Request</h2>
+            <p style="color: #666; margin-bottom: 1.5rem;">Please provide detailed information to help donors understand your situation</p>
             <div id="requestMessage"></div>
-            <form onsubmit="submitRequest(event)">
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <input type="text" id="requestName" required>
+            <form onsubmit="submitRequest(event)" enctype="multipart/form-data">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <input type="text" id="requestName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Age *</label>
+                        <input type="number" id="requestAge" required min="1" max="120">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>District</label>
-                    <select id="requestDistrict" required>
-                        <option value="">Select District</option>
-                        <option value="1">District 1</option>
-                        <option value="2">District 2</option>
-                        <option value="3">District 3</option>
-                    </select>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>District *</label>
+                        <select id="requestDistrict" required>
+                            <option value="">Select District</option>
+                            <option value="1">District 1</option>
+                            <option value="2">District 2</option>
+                            <option value="3">District 3</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <select id="requestCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="1">Medical</option>
+                            <option value="2">Education</option>
+                            <option value="3">Emergency</option>
+                            <option value="4">Other</option>
+                        </select>
+                    </div>
                 </div>
+                
                 <div class="form-group">
-                    <label>Category</label>
-                    <select id="requestCategory" required>
-                        <option value="">Select Category</option>
-                        <option value="1">Medical</option>
-                        <option value="2">Education</option>
-                        <option value="3">Emergency</option>
-                        <option value="4">Other</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Amount Needed (₹)</label>
+                    <label>Amount Needed (₹) *</label>
                     <input type="number" id="requestAmount" required min="1">
                 </div>
+                
+                <!-- Photo Upload -->
                 <div class="form-group">
-                    <label>Description</label>
-                    <textarea id="requestDescription" required rows="4" placeholder="Explain your situation and how the funds will help..."></textarea>
+                    <label>📷 Upload Photo * <small style="color: #999;">(Your photo or family photo)</small></label>
+                    <div class="file-upload-wrapper">
+                        <label class="file-upload-label" for="requestPhoto">
+                            <span id="photoLabel">📋 Click to upload photo (JPG, PNG)</span>
+                        </label>
+                        <input type="file" id="requestPhoto" class="file-upload-input" accept="image/*" onchange="previewPhoto(event)" required>
+                    </div>
+                    <div id="photoPreview" class="file-preview" style="display:none;"></div>
                 </div>
+                
+                <!-- Supporting Documents -->
                 <div class="form-group">
-                    <label>Receive Funds Via</label>
+                    <label>📄 Supporting Documents <small style="color: #999;">(Medical reports, bills, certificates, etc. - Optional)</small></label>
+                    <div class="file-upload-wrapper">
+                        <label class="file-upload-label" for="requestDocuments">
+                            <span id="docLabel">📋 Click to upload documents (PDF, JPG, PNG)</span>
+                        </label>
+                        <input type="file" id="requestDocuments" class="file-upload-input" accept="image/*,.pdf" multiple onchange="previewDocuments(event)">
+                    </div>
+                    <div id="documentsPreview" class="file-preview" style="display:none;"></div>
+                </div>
+                
+                <!-- Detailed Information -->
+                <div class="form-group">
+                    <label>Current Situation * <small style="color: #999;">(Describe your current circumstances in detail)</small></label>
+                    <textarea id="requestCurrentSituation" required rows="3" placeholder="Tell us about your current situation, challenges you're facing..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Why Do You Need This Money? * <small style="color: #999;">(Be specific about what the money will be used for)</small></label>
+                    <textarea id="requestWhyNeedMoney" required rows="3" placeholder="Explain exactly what expenses you need help with (e.g., surgery costs, school fees, emergency expenses)..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>How Will This Help Impact Your Life? * <small style="color: #999;">(Explain the positive change this support will bring)</small></label>
+                    <textarea id="requestImpact" required rows="3" placeholder="Describe how receiving this help will change your life or situation..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Short Description * <small style="color: #999;">(A brief summary for the card - max 150 characters)</small></label>
+                    <textarea id="requestShortDescription" required rows="2" maxlength="150" placeholder="E.g., 'Fighting blood cancer, needs help with treatment costs'..."></textarea>
+                </div>
+                <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 2rem 0;">
+                <h3 style="color: #1CABE2; margin-bottom: 1rem; font-size: 1.2rem;">Payment Information</h3>
+                
+                <div class="form-group">
+                    <label>Receive Funds Via *</label>
                     <select id="requestReceiveMethod" onchange="toggleRequestReceiveFields()" required>
                         <option value="bank_account">Bank Account</option>
                         <option value="upi">UPI</option>
@@ -645,6 +1599,31 @@
             if (modal) {
                 modal.classList.remove('active');
             }
+        }
+        
+        // Horizontal scroll functions
+        function scrollCards(direction) {
+            const container = document.getElementById('requestsGrid');
+            const scrollAmount = 300;
+            
+            if (direction === 'left') {
+                container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            } else {
+                container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
+        }
+        
+        // Category filter function
+        function filterByCategory(category) {
+            // Update active filter button
+            document.querySelectorAll('.category-filter').forEach(filter => {
+                filter.classList.remove('active');
+            });
+            event.target.closest('.category-filter').classList.add('active');
+            
+            // Filter cards (for now just show all - you can implement filtering logic later)
+            console.log('Filtering by category:', category);
+            // TODO: Implement actual filtering based on category
         }
         
         async function login(e) {
@@ -767,36 +1746,108 @@
             }
         }
         
+        // File preview functions
+        function previewPhoto(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('photoPreview');
+            const label = document.getElementById('photoLabel');
+            
+            if (file) {
+                label.textContent = '✅ ' + file.name;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = '<strong>Preview:</strong><br><img src="' + e.target.result + '" alt="Photo preview">';
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function previewDocuments(event) {
+            const files = event.target.files;
+            const preview = document.getElementById('documentsPreview');
+            const label = document.getElementById('docLabel');
+            
+            if (files.length > 0) {
+                label.textContent = '✅ ' + files.length + ' file(s) selected';
+                let fileList = '<strong>Selected files:</strong><br>';
+                for (let i = 0; i < files.length; i++) {
+                    fileList += '📎 ' + files[i].name + '<br>';
+                }
+                preview.innerHTML = fileList;
+                preview.style.display = 'block';
+            }
+        }
+        
+        // Helper function to convert file to base64
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+        
         async function submitRequest(e) {
             e.preventDefault();
-            const name = document.getElementById('requestName').value;
-            const district_id = document.getElementById('requestDistrict').value;
-            const category_id = document.getElementById('requestCategory').value;
-            const amount = document.getElementById('requestAmount').value;
-            const description = document.getElementById('requestDescription').value;
-            const receive_method = document.getElementById('requestReceiveMethod').value;
             
-            // Collect bank or UPI details based on selection
-            let receive_details = { method: receive_method };
-            if (receive_method === 'bank_account') {
-                receive_details.account_number = document.getElementById('requestAccountNumber').value;
-                receive_details.bank_name = document.getElementById('requestBankName').value;
-                receive_details.ifsc_code = document.getElementById('requestIfscCode').value;
-            } else if (receive_method === 'upi') {
-                receive_details.upi_id = document.getElementById('requestUpiId').value;
-            }
+            // Show loading message
+            document.getElementById('requestMessage').innerHTML = '<div class="message">Uploading files and submitting request...</div>';
             
             try {
+                const name = document.getElementById('requestName').value;
+                const age = document.getElementById('requestAge').value;
+                const district_id = document.getElementById('requestDistrict').value;
+                const category_id = document.getElementById('requestCategory').value;
+                const amount = document.getElementById('requestAmount').value;
+                const short_description = document.getElementById('requestShortDescription').value;
+                const current_situation = document.getElementById('requestCurrentSituation').value;
+                const why_need_money = document.getElementById('requestWhyNeedMoney').value;
+                const impact = document.getElementById('requestImpact').value;
+                const receive_method = document.getElementById('requestReceiveMethod').value;
+                
+                // Get photo file and convert to base64
+                const photoFile = document.getElementById('requestPhoto').files[0];
+                const photoBase64 = photoFile ? await fileToBase64(photoFile) : null;
+                
+                // Get document files and convert to base64 array
+                const documentFiles = document.getElementById('requestDocuments').files;
+                const documentsBase64 = [];
+                for (let i = 0; i < documentFiles.length; i++) {
+                    const docBase64 = await fileToBase64(documentFiles[i]);
+                    documentsBase64.push({
+                        filename: documentFiles[i].name,
+                        data: docBase64
+                    });
+                }
+                
+                // Collect bank or UPI details based on selection
+                let receive_details = { method: receive_method };
+                if (receive_method === 'bank_account') {
+                    receive_details.account_number = document.getElementById('requestAccountNumber').value;
+                    receive_details.bank_name = document.getElementById('requestBankName').value;
+                    receive_details.ifsc_code = document.getElementById('requestIfscCode').value;
+                } else if (receive_method === 'upi') {
+                    receive_details.upi_id = document.getElementById('requestUpiId').value;
+                }
+                
                 const response = await fetch('/api/submit-request', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     credentials: 'include',
                     body: JSON.stringify({
                         name, 
+                        age,
                         district_id, 
                         category_id, 
                         amount, 
-                        description,
+                        short_description,
+                        current_situation,
+                        why_need_money,
+                        impact,
+                        photo: photoBase64,
+                        documents: documentsBase64,
                         receive_method,
                         account_number: receive_details.account_number,
                         bank_name: receive_details.bank_name,
@@ -815,13 +1866,17 @@
                     document.getElementById('requestMessage').innerHTML = '<div class="message error">' + (data.error || 'Submission failed') + '</div>';
                 }
             } catch (error) {
-                document.getElementById('requestMessage').innerHTML = '<div class="message error">An error occurred</div>';
+                console.error('Error:', error);
+                document.getElementById('requestMessage').innerHTML = '<div class="message error">An error occurred: ' + error.message + '</div>';
             }
         }
+        
+        let currentDonationRequestId = null;
         
         async function openDonateModal(requestId, name, amount) {
             // FREE UPI Payment - No Gateway Fees!
             console.log('openDonateModal called with:', {requestId, name, amount});
+            currentDonationRequestId = requestId;
             
             try {
                 openModal('donateModal');
@@ -842,6 +1897,7 @@
                     document.getElementById('qrCodeImage').src = data.qr_code;
                     document.getElementById('displayUpiId').textContent = data.upi_id;
                     document.getElementById('upiDeepLink').href = data.upi_link;
+                    document.getElementById('confirmAmount').value = amount;
                     
                     // Show UPI section
                     document.getElementById('qrLoading').style.display = 'none';
@@ -881,6 +1937,45 @@
             document.getElementById('donorCardNumber').required = (method === 'card');
             document.getElementById('donorCardExpiry').required = (method === 'card');
             document.getElementById('donorCardCvv').required = (method === 'card');
+        }
+        
+        async function confirmPayment() {
+            const amount = document.getElementById('confirmAmount').value;
+            const transactionId = document.getElementById('confirmTransactionId').value;
+            const donorName = document.getElementById('confirmDonorName').value || 'Anonymous';
+            
+            if (!amount || amount <= 0) {
+                document.getElementById('confirmMessage').innerHTML = '<div class="message error">Please enter the amount you paid</div>';
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/confirm-payment', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        request_id: currentDonationRequestId,
+                        amount: parseFloat(amount),
+                        transaction_id: transactionId,
+                        donor_name: donorName,
+                        payment_method: 'upi'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('confirmMessage').innerHTML = '<div class="message success">✅ Thank you! Donation confirmed. Refreshing...</div>';
+                    setTimeout(() => {
+                        closeModal('donateModal');
+                        location.reload();
+                    }, 2000);
+                } else {
+                    document.getElementById('confirmMessage').innerHTML = '<div class="message error">Error: ' + (data.error || 'Failed to confirm payment') + '</div>';
+                }
+            } catch (error) {
+                document.getElementById('confirmMessage').innerHTML = '<div class="message error">Error: ' + error.message + '</div>';
+            }
         }
         
         async function submitDonation(e) {
@@ -944,6 +2039,50 @@
                 document.getElementById('donateMessage').innerHTML = '<div class="message error">Error: ' + error.message + '</div>';
             }
         }
+        
+        // Grid is ready - no marquee needed
+        function initGrid() {
+            console.log('Grid layout initialized with', document.querySelectorAll('.request-card').length, 'cards');
+        }
+        
+        // Category filtering
+        function filterByCategory(category) {
+            const cards = document.querySelectorAll('.request-card');
+            const tabs = document.querySelectorAll('.category-tab');
+            
+            // Update active tab
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Filter cards
+            cards.forEach(card => {
+                const cardCategory = card.getAttribute('data-category');
+                if (category === 'all' || cardCategory.includes(category)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        // Search functionality
+        function filterCards() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.request-card');
+            
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        // Run on page load
+        document.addEventListener('DOMContentLoaded', initGrid);
+        window.addEventListener('load', initGrid);
     </script>
 </body>
 </html>
