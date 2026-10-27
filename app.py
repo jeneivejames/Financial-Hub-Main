@@ -57,13 +57,66 @@ def admin_logout():
 @app.route('/')
 def index():
     try:
-        requests_data = db.get_all_requests()
-        quotes = db.get_all_quotes()
-        random_quote = random.choice(quotes) if quotes else {'text': 'Together we can make a difference', 'author': 'Anonymous'}
-        
+        # Determine which requests to show based on user role
         user = None
+        is_admin = session.get('admin_logged_in', False)
+        
         if 'user_id' in session:
             user = db.get_user_by_id(session['user_id'])
+        
+        if is_admin:
+            # Admin sees ALL requests
+            requests_data = db.get_all_requests()
+        elif user:
+            # Logged in users see: approved requests + their own requests (any status)
+            approved_requests = db.get_approved_requests()
+            user_requests = db.get_user_requests(user['id'])
+            
+            # Merge and deduplicate
+            requests_dict = {req['id']: req for req in approved_requests}
+            for req in user_requests:
+                if req['id'] not in requests_dict:
+                    requests_dict[req['id']] = req
+            
+            requests_data = list(requests_dict.values())
+        else:
+            # Guest users see only approved requests
+            requests_data = db.get_approved_requests()
+        
+        # Sort requests: Active campaigns first, Goal Reached last
+        def sort_priority(req):
+            """
+            Return sort key: (priority, percentage_funded)
+            - priority 0: Active campaigns needing funds (show first)
+            - priority 1: Pending/rejected (middle)
+            - priority 2: Goal reached (show last)
+            """
+            total_received = req.get('total_received') or 0
+            amount_needed = req.get('amount_needed') or 1
+            percentage = (total_received / amount_needed) * 100 if amount_needed > 0 else 0
+            
+            # Check if goal is reached
+            goal_reached = total_received >= amount_needed
+            
+            # Check approval status
+            is_approved = req.get('approval_status') == 'approved'
+            
+            if is_approved and goal_reached:
+                # Goal reached - show LAST
+                return (2, -percentage)  # Higher priority = later
+            elif is_approved and not goal_reached:
+                # Active campaign needing funds - show FIRST
+                # Sort by percentage (lower percentage = more urgent = earlier)
+                return (0, percentage)
+            else:
+                # Pending/rejected - middle
+                return (1, percentage)
+        
+        # Apply sorting
+        requests_data = sorted(requests_data, key=sort_priority)
+        
+        quotes = db.get_all_quotes()
+        random_quote = random.choice(quotes) if quotes else {'text': 'Together we can make a difference', 'author': 'Anonymous'}
         
         try:
             # Try Flask's render_template first
@@ -94,6 +147,41 @@ def index():
             # If all paths fail, raise the original error
             raise template_error
             
+    except Exception as e:
+        import traceback
+        return jsonify({
+            'error': str(e),
+            'type': type(e).__name__,
+            'traceback': traceback.format_exc()
+        }), 500
+
+
+# ========== DETAIL PAGE ==========
+@app.route('/request/<request_id>')
+def request_detail(request_id):
+    try:
+        # Get the specific request
+        request_data = db.get_request_by_id(request_id)
+
+        if not request_data:
+            return "Request not found", 404
+
+        # Check permissions
+        user = None
+        is_admin = session.get('admin_logged_in', False)
+
+        if 'user_id' in session:
+            user = db.get_user_by_id(session['user_id'])
+
+        # Only show if:
+        # 1. Admin
+        # 2. Request is approved
+        # 3. User is the creator
+        if not is_admin and request_data['approval_status'] != 'approved':
+            if not user or user['id'] != request_data['user_id']:
+                return "Access denied", 403
+
+        return render_template('detail.html', request=request_data, user=user)
     except Exception as e:
         import traceback
         return jsonify({
@@ -172,20 +260,38 @@ def submit_request():
         district_id = data.get('district_id')
         category_id = data.get('category_id')
         amount = data.get('amount')
+        age = data.get('age')
         
-        description = data.get('description', '')
+        # Detailed information
+        short_description = data.get('short_description', '')
+        current_situation = data.get('current_situation', '')
+        why_need_money = data.get('why_need_money', '')
+        impact = data.get('impact', '')
+        
+        # Photo and documents (base64 encoded)
+        photo = data.get('photo')  # Base64 string
+        documents = data.get('documents', [])  # Array of {filename, data}
+        
+        # Combine all text for full description
+        full_description = f"{current_situation}\n\n{why_need_money}\n\n{impact}"
         
         request_data = {
             'name': data.get('name'),
+            'age': int(age) if age else None,
             'district_id': int(float(district_id)) if district_id else None,
             'category_id': int(float(category_id)) if category_id else None,
             'amount_needed': int(float(amount)) if amount else None,
-            'description': description,
-            'short_description': description[:100] if description else '',  # First 100 chars
-            'detailed_message': description,  # Full description
+            'short_description': short_description,
+            'description': full_description,  # Combined description
+            'current_situation': current_situation,
+            'why_need_money': why_need_money,
+            'impact': impact,
+            'photo': photo,  # Base64 encoded photo
+            'documents': str(documents) if documents else None,  # Store as JSON string
+            'detailed_message': full_description,
             'user_id': session['user_id'],
             'approval_status': 'pending',
-            'status': 'active',  # Changed from 'open' to 'active'
+            'status': 'active',
             'total_received': 0
         }
         
@@ -366,6 +472,53 @@ def generate_upi_qr(request_id):
             return jsonify({'error': 'UPI ID not available for this request'}), 400
             
     except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# ========== PAYMENT CONFIRMATION (Manual) ==========
+@app.route('/api/confirm-payment', methods=['POST'])
+def confirm_payment():
+    """Manual payment confirmation after UPI transfer"""
+    try:
+        data = request.json
+        request_id = data.get('request_id')
+        amount = float(data.get('amount', 0))
+        transaction_id = data.get('transaction_id', '')
+        donor_name = data.get('donor_name', 'Anonymous')
+        payment_method = data.get('payment_method', 'upi')
+        
+        if not request_id or amount <= 0:
+            return jsonify({'error': 'Invalid request or amount'}), 400
+        
+        # Get the help request
+        help_request = db.get_request_by_id(request_id)
+        if not help_request:
+            return jsonify({'error': 'Request not found'}), 404
+        
+        # Create payment record
+        payment_data = {
+            'request_id': request_id,
+            'donor_id': session.get('user_id'),  # Can be None for guest
+            'amount': amount,
+            'payment_method': payment_method,
+            'payment_status': 'confirmed',  # Manual confirmation
+            'notes': f'Donor: {donor_name}, Transaction ID: {transaction_id}' if transaction_id else f'Donor: {donor_name}'
+        }
+        
+        payment = db.create_payment(payment_data)
+        
+        # Update request total_received
+        current_received = float(help_request.get('total_received', 0))
+        new_total = current_received + amount
+        db.update_request(request_id, {'total_received': new_total})
+        
+        return jsonify({
+            'success': True, 
+            'message': 'Payment confirmed successfully',
+            'new_total': new_total
+        })
+        
+    except Exception as e:
+        print(f'[ERROR] Payment confirmation failed: {str(e)}', file=sys.stderr)
         return jsonify({'error': str(e)}), 500
 
 # Vercel will handle the app execution

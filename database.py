@@ -26,6 +26,42 @@ class Database:
         
         return requests
     
+    def get_approved_requests(self):
+        """Get only approved requests for public view"""
+        requests_response = self.supabase.table('help_requests').select('*').eq('approval_status', 'approved').execute()
+        requests = requests_response.data
+        
+        # Build lookup dicts for districts and categories
+        districts = {d['id']: d for d in self.get_all_districts()}
+        categories = {c['id']: c for c in self.get_all_categories()}
+        
+        # Enrich each request with district and category names
+        for req in requests:
+            district_id = req.get('district_id')
+            category_id = req.get('category_id')
+            req['districts'] = districts.get(district_id, {'name': 'Unknown'})
+            req['categories'] = categories.get(category_id, {'name': 'Unknown'})
+        
+        return requests
+    
+    def get_user_requests(self, user_id):
+        """Get all requests created by a specific user"""
+        requests_response = self.supabase.table('help_requests').select('*').eq('user_id', user_id).execute()
+        requests = requests_response.data
+        
+        # Build lookup dicts for districts and categories
+        districts = {d['id']: d for d in self.get_all_districts()}
+        categories = {c['id']: c for c in self.get_all_categories()}
+        
+        # Enrich each request with district and category names
+        for req in requests:
+            district_id = req.get('district_id')
+            category_id = req.get('category_id')
+            req['districts'] = districts.get(district_id, {'name': 'Unknown'})
+            req['categories'] = categories.get(category_id, {'name': 'Unknown'})
+        
+        return requests
+    
     def get_request_by_id(self, request_id):
         response = self.supabase.table('help_requests').select('*').eq('id', request_id).execute()
         if not response.data:
